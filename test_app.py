@@ -262,3 +262,18 @@ def test_iteration_15_get_tasks_count(client):
     assert data["total"] == 3
     assert data["active"] == 2
     assert data["completed"] == 1
+
+# ════════════════════════════════════════════════════════════════════════════
+# ИТЕРАЦИЯ 16 — Задача не может быть выполнена дважды
+# RED:    тест падает — повторное выполнение не проверяется
+# GREEN:  добавим проверку в маршрут complete
+# REFACTOR: —
+# ════════════════════════════════════════════════════════════════════════════
+
+def test_iteration_16_cannot_complete_twice(client):
+    """PATCH /tasks/1/complete повторно возвращает 400."""
+    client.post("/tasks", json={"title": "Задача"})
+    client.patch("/tasks/1/complete")
+    response = client.patch("/tasks/1/complete")
+    assert response.status_code == 400
+    assert "error" in response.get_json()

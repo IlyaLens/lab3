@@ -72,6 +72,8 @@ def completeTask(task_id):
     task = findTask(task_id)
     if task is None:
         return jsonify({"error": "Task not found"}), 404
+    if task["completed"]:
+        return jsonify({"error": "Task is already completed"}), 400
     task["completed"] = True
     return jsonify(task), 200
 
